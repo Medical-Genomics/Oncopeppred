@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OncoPepPred</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      overflow: hidden;
+      background-image: url('/static/images/10.webp'); /* Full-page background */
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    body {
+      background: rgba(200, 235, 242, 0.5)
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+      z-index: -1;
+    }
+
+    /* Top Navigation Bar */
+    nav {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      z-index: 10;
+    }
+
+    nav .logo {
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav .nav-links a {
+      color: rgb(46, 6, 61);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav .nav-links a:hover {
+      color: #f84403;
+    }
+
+    /* Full-Screen Hero Section */
+    header {
+      height: 40vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .title-box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px 40px;
+      border-radius: 50px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    .title-box h1 {
+      font-size: 50px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .title-box h3 {
+      font-size: 20px;
+      font-weight: 400;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    /* Section Styles - Centered, Card-Like, with Hover Effect */
+    .sections {
+      position: absolute;
+      bottom: 150px;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .section {
+      width: 30%;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 30px;
+      overflow: hidden;
+      margin: 0 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .section h2 {
+      font-size: 24px;
+      color: #f3eaef;
+      margin-bottom: 20px;
+    }
+
+    .section p {
+      color: #e0e0e0;
+      margin-bottom: 20px;
+    }
+
+    .section button {
+      padding: 12px 30px;
+      font-size: 16px;
+      background: #fefbfb;
+      color: rgb(26, 23, 23);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .section button:hover {
+      background: #379f4a;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media screen and (max-width: 768px) {
+      .title-box h1 {
+        font-size: 35px;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        margin-top: 10px;
+        gap: 15px;
+      }
+
+      .sections {
+        flex-direction: column;
+        align-items: center;
+        bottom: 20px;
+      }
+
+      .section {
+        width: 80%;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <img src="/static/images/logo.png" alt="OncoPepPred Logo" style="height: 50px;">
+    </div>
+    <div class="nav-links">
+      <a href="/about.html">About Us</a>
+      <a href="/contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Title and Subtitle -->
+  <header>
+    <div class="title-box">
+      <h1>OncoPepPred</h1>
+      <h3>Anticancer Peptide Predictor</h3>
+    </div>
+  </header>
+
+  <!-- Three Feature Sections -->
+  <div class="sections">
+    <!-- About Section -->
+    <div class="section">
+      <div class="section-content">
+        <h2>About OncoPepPred</h2>
+        <p>Explore how anticancer peptides (ACPs) fight cancer cells while sparing healthy tissues. Learn the science behind selective peptide-based cancer therapy.</p>
+        <button onclick="location.href='/index'">Explore More</button>
+      </div>
+    </div>
+
+    <!-- Prediction & Features Section -->
+    <div class="section" id="sec2">
+      <div class="section-content">
+        <h2>Prediction & Features</h2>
+        <p>Use our AI-driven CNN model to classify ACPs based on key features like Amino Acid Composition, Dipeptide Composition, Physicochemical Properties, and Pharmacophore fingerprints.</p>
+        <button onclick="location.href='/prediction'">Predict Now</button>
+      </div>
+    </div>
+
+    <!-- Structure Modeling Section -->
+    <div class="section">
+      <div class="section-content">
+        <h2>Structure Modeling</h2>
+        <p>Visualize 2D and 3D structures of peptides using modern molecular rendering tools. Inspect interactions and gain structural insights into potential anticancer mechanisms.</p>
+        <button onclick="location.href='/structure_prediction'">Visualize Peptides</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

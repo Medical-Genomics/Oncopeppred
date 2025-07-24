@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anticancer Peptide Database</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: black;
+      background-color: white;
+    }
+
+    nav {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      z-index: 10;
+    }
+
+    nav .logo {
+      font-size: 24px;
+      font-weight: 600;
+      color: black;
+    }
+
+    h1 {
+      color: rgba(221, 217, 14, 0.91);
+      margin-top: 100px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .search-box {
+      margin: 20px auto;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    input {
+      padding: 8px;
+      width: 70%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 8px 14px;
+      background-color: red;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-left: 5px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+    }
+
+    .button-group a,
+    .button-group button {
+      display: inline-block;
+      margin: 5px;
+      padding: 8px 16px;
+      background-color: #800080;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .button-group a:hover,
+    .button-group button:hover {
+      background-color: #a020f0;
+    }
+
+    section {
+      margin: 40px auto;
+      max-width: 1000px;
+      padding: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #f3f3f3;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #800080;
+      color: white;
+    }
+
+    footer {
+      background-color: #800080;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    .flowchart img {
+      max-width: 90%;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    #sr {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 200px; /* You can adjust size as needed */
+      height: auto;
+      z-index: 1000; /* Make sure it appears above other elements */
+  }
+
+  </style>
+</head>
+<body>
+
+  <nav><div class="logo">
+    <img src="/static/images/logo.png" alt="OncoPepPred Logo" style="height: 50px;">
+  </div></nav>
+  <img src="{{ url_for('static', filename='images/ser.png') }}" id="sr">
+
+  <h1>Anticancer Peptide Database</h1>
+
+  <div class="search-box">
+    <form action="/search" method="GET" id="searchForm">
+      <input type="text" name="query" placeholder="Search peptides..." id="searchInput" />
+      <button type="submit">Search</button>
+    </form>
+    <div class="button-group">
+      <a href="/">Back to Home</a>
+      <button type="button" onclick="document.getElementById('searchInput').value = '';">Reset</button>
+    </div>
+  </div>
+
+  <!-- Introduction Section -->
+  <section style="background-color: rgba(247, 250, 251, 0.85); border-radius: 10px;">
+    <h2 style="color: #6a0dad;">🧬 Anticancer Peptides (ACPs)</h2>
+    <p>
+      Anticancer peptides (ACPs) are short amino acid sequences known for their ability to target and kill cancer cells selectively. 
+      They offer a promising alternative to conventional therapies due to their high specificity, minimal side effects, and unique mechanisms of action.
+    </p>
+  </section>
+
+  <!-- Sample ACP Table -->
+  <section>
+    <h2 style="color: #6a0dad;">📊 Example Anticancer Peptides</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Peptide Name</th>
+          <th>Sequence</th>
+          <th>Length</th>
+          <th>PMID</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Vhl-2</td>
+          <td>GLPVCGETCFTGTCYTNGCTCDPWPVCTRN</td>
+          <td>30</td>
+          <td>15824119</td>
+        </tr>
+        <tr>
+          <td>grifficyclocin A</td>
+          <td>PIFPPGLP</td>
+          <td>8</td>
+          <td>14598208</td>
+        </tr>
+        <tr>
+          <td>Linear Cyclotide Panitide L6</td>
+          <td>XLPICGETCVLGTCYTPGCSCAYPICVR</td>
+          <td>28</td>
+          <td>23195955</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Flowchart Section -->
+  
+
+  <footer>
+    <p>&copy; 2025 OncoPepPred | Designed for ACP research and prediction</p>
+  </footer>
+
+</body>
+</html>

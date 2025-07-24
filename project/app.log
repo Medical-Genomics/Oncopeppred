@@ -1,0 +1,21 @@
+2025-03-26 11:35:15,171 - DEBUG - Creating converter from 3 to 5
+2025-03-26 11:35:15,343 - WARNING - Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+2025-03-26 11:35:15,413 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5002
+ * Running on http://192.168.0.119:5002
+2025-03-26 11:35:15,414 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 11:35:15,415 - INFO -  * Restarting with stat
+2025-03-26 11:35:20,041 - DEBUG - Creating converter from 3 to 5
+2025-03-26 11:35:20,206 - WARNING - Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+2025-03-26 11:35:20,224 - WARNING -  * Debugger is active!
+2025-03-26 11:35:20,229 - INFO -  * Debugger PIN: 114-447-770
+2025-03-26 11:35:39,984 - INFO - 192.168.0.119 - - [26/Mar/2025 11:35:39] "GET / HTTP/1.1" 200 -
+2025-03-26 11:35:40,127 - INFO - 192.168.0.119 - - [26/Mar/2025 11:35:40] "[36mGET /static/Peptide.jpg HTTP/1.1[0m" 304 -
+2025-03-26 11:35:45,222 - INFO - 192.168.0.119 - - [26/Mar/2025 11:35:45] "GET /search?query=anticancer HTTP/1.1" 200 -
+2025-03-26 11:35:45,247 - INFO - 192.168.0.119 - - [26/Mar/2025 11:35:45] "[36mGET /static/Peptide.jpg HTTP/1.1[0m" 304 -
+2025-03-26 11:35:47,867 - INFO - 192.168.0.119 - - [26/Mar/2025 11:35:47] "[33mGET /peptide/ACP01 HTTP/1.1[0m" 404 -
+2025-03-26 11:35:56,814 - INFO - 192.168.0.119 - - [26/Mar/2025 11:35:56] "[33mGET /downloads HTTP/1.1[0m" 404 -
+2025-03-26 11:36:00,129 - INFO - 192.168.0.119 - - [26/Mar/2025 11:36:00] "[33mGET /prediction HTTP/1.1[0m" 404 -
+2025-03-26 11:38:33,930 - INFO -  * Detected change in 'C:\\Users\\Manic\\AppData\\Local\\Programs\\Python\\Python310\\Scripts\\project\\app.py', reloading
+2025-03-26 11:38:34,710 - INFO -  * Restarting with stat

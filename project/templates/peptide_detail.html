@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peptide Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('{{ url_for("static", filename="Peptide.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            margin: auto;
+            width: 60%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+        }
+        h1, h2 {
+            color: yellow;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid white;
+            text-align: left;
+            color: white;
+        }
+        th {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-btn:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Peptide Details</h1>
+        <h2>{{ peptide["Peptide Name"] }}</h2>
+
+        <table>
+            <tr><th>Sequence</th><td>{{ peptide["Sequence"] }}</td></tr>
+            <tr><th>Length</th><td>{{ peptide["Sequence"]|length }}</td></tr>
+            <tr><th>Activity</th><td>{{ peptide.get("Activity", "N/A") }}</td></tr>
+            <tr><th>Molecular Weight</th><td>{{ peptide.get("Molecular Weight", "N/A") }}</td></tr>
+            <tr><th>Charge</th><td>{{ peptide.get("Charge", "N/A") }}</td></tr>
+            <tr><th>H_Donor</th><td>{{ peptide.get("H_Donor", "N/A") }}</td></tr>
+            <tr><th>H_Acceptor</th><td>{{ peptide.get("H_Acceptor", "N/A") }}</td></tr>
+            <tr><th>Hydrophobicity</th><td>{{ peptide.get("Hydrophobicity", "N/A") }}</td></tr>
+            <tr><th>Log_P Value</th><td>{{ peptide.get("Log_P", "N/A") }}</td></tr>
+            <tr><th>Reference</th><td>{{ peptide.get("Reference", "N/A") }}</td></tr>
+            <tr><th>Source</th><td>{{ peptide.get("Source", "N/A") }}</td></tr>
+        </table>
+
+        <a href="/" class="back-btn">Back to Home</a>
+    </div>
+
+</body>
+</html>

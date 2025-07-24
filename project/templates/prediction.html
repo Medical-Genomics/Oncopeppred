@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACP Prediction</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <video autoplay muted loop id="background-video">
+        <source src="{{ url_for('static', filename='pep.webm') }}" type="video/webm">
+        Your browser does not support the video tag.
+    </video>
+
+    <style>
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            object-fit: cover;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 60px;
+            margin-top: 130px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .btn-custom {
+            font-weight: bold;
+            border-radius: 5px;
+            flex: 1;
+        }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary:hover { background-color: #6c757d; }
+        .btn-danger:hover { background-color: #b30000; }
+        #sequence {
+            font-size: 16px;
+            padding: 10px;
+            text-transform: uppercase;
+        }
+        .nav-link-feature {
+            display: inline-block;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #loadingSpinner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            z-index: 1000;
+            padding-top: 20%;
+        }
+        #sequenceError {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">Anticancer Peptide (ACP) Prediction</h2>
+
+    <form id="predictionForm" class="mt-4">
+        <div class="mb-3">
+            <label for="sequence" class="form-label">Enter Peptide Sequence:</label>
+            <input type="text" class="form-control" id="sequence" name="sequence"
+                   value="{{ sequence if sequence else '' }}"
+                   required oninput="validateInput()"
+                   pattern="[ACDEFGHIKLMNPQRSTVWYacdefghiklmnpqrstvwy]+"
+                   title="Only valid amino acid letters (A-Z) allowed"
+                   aria-label="Peptide sequence input">
+            <div id="sequenceError">Please enter a valid peptide sequence (only valid amino acid letters are allowed).</div>
+        </div>
+        <div class="d-flex justify-content-between gap-2">
+            <button type="submit" class="btn btn-primary btn-custom" id="submitBtn" disabled>Predict</button>
+            <button type="button" class="btn btn-secondary btn-custom" onclick="resetForm()">Reset</button>
+            <a href="/" class="btn btn-danger btn-custom">Home</a>
+        </div>
+    </form>
+
+    <div id="loadingSpinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Predicting...</span>
+        </div>
+        <p>Predicting...</p>
+    </div>
+
+    <!-- Prediction and Feature View Section -->
+    <div id="resultSection"></div>
+
+    {% if error %}
+    <div class="alert alert-warning mt-3 text-center" role="alert">
+        ⚠️ <strong>{{ error }}</strong><br>
+        Please make sure the sequence is valid and try again.
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function validateInput() {
+        const input = document.getElementById("sequence").value.trim();
+        const isValid = /^[ACDEFGHIKLMNPQRSTVWYacdefghiklmnpqrstvwy]+$/.test(input);
+        document.getElementById("submitBtn").disabled = !isValid;
+        document.getElementById("sequenceError").style.display = isValid ? "none" : "block";
+    }
+
+    function resetForm() {
+        if (confirm("Are you sure you want to reset the form?")) {
+            document.getElementById("sequence").value = "";
+            document.getElementById("resultSection").innerHTML = "";
+            document.getElementById("loadingSpinner").style.display = "none";
+            validateInput();
+        }
+    }
+
+    window.onload = validateInput;
+
+    document.getElementById("predictionForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        document.getElementById("loadingSpinner").style.display = "block";
+        document.getElementById("resultSection").innerHTML = "";
+
+        const sequence = document.getElementById("sequence").value.trim();
+
+        fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sequence: sequence })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("loadingSpinner").style.display = "none";
+
+            if (data.prediction) {
+                const resultHTML = `
+                    <div class="alert mt-4 text-center ${data.prediction === 'ACP' ? 'alert-success' : 'alert-danger'}" role="alert">
+                        <h4>Prediction: <strong>${data.prediction}</strong></h4>
+                    </div>
+                    <div class="nav-link-feature text-center">
+                        <form action="/features" method="POST">
+                            <input type="hidden" name="sequence" value="${sequence}">
+                            <button type="submit" class="btn btn-outline-info">View Extracted Features</button>
+                        </form>
+                    </div>
+                `;
+                document.getElementById("resultSection").innerHTML = resultHTML;
+            } else if (data.error) {
+                document.getElementById("resultSection").innerHTML = `
+                    <div class="alert alert-warning mt-3 text-center" role="alert">
+                        ⚠️ <strong>${data.error}</strong>
+                        <br>Please make sure the sequence is valid and try again.
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById("loadingSpinner").style.display = "none";
+            alert("Something went wrong. Please try again.");
+        });
+    });
+</script>
+
+</body>
+</html>

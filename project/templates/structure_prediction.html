@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Peptide Structure Visualization</title>
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+    
+    
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            color: black;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgb(236, 255, 255);
+            background-size: contain; /* or cover, depending on what you want */
+        }
+        
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            background: rgb(236, 255, 255);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 700px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .viewer {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .properties-table {
+            margin-top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .properties-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .properties-table th, .properties-table td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        nav {
+            position: absolute;
+            top: 0;
+            left:10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            z-index: 10;
+          }
+      
+          nav .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: black;
+          }
+        .style-selector {
+            margin-top: 50px;
+        }
+        .btn-group button {
+            margin-right: 10px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-group button:hover {
+            background-color: #45a049;
+        }
+        .btn-reset {
+            background-color: #f44336;
+        }
+        .btn-reset:hover {
+            background-color: #d32f2f;
+        }
+        .btn-home {
+            background-color: #2196F3;
+        }
+        .btn-home:hover {
+            background-color: #1976D2;
+        }
+        .download-btn {
+            margin-top: 10px;
+            background-color: #FFA500;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background-color: #e69500;
+        }
+        .button-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        #sr {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 200px; /* You can adjust size as needed */
+            height: auto;
+            z-index: 1000; /* Make sure it appears above other elements */
+        }
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+            opacity: 0.3; /* optional: adjust for better readability */
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="{{ url_for('static', filename='pep1.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <nav><div class="logo">
+        <img src="/static/images/logo.png" alt="OncoPepPred Logo" style="height: 50px;">
+      </div></nav>
+    <img src="{{ url_for('static', filename='images/download.png') }}" id="sr">
+
+
+<h1>Peptide Structure Visualization Tool</h1>
+
+<form method="POST" action="/predict_structure" id="structureForm">
+    <label for="sequence">Enter Peptide Sequence:</label><br>
+    <textarea id="sequence" name="sequence" placeholder="e.g., ACDEFGHIKLMNPQRSTVWY">{{ sequence or '' }}</textarea><br><br>
+
+    <label>Select Visualization Type:</label><br>
+    <input type="radio" id="vis2d" name="vis_type" value="2d" {% if vis_type == '2d' or not vis_type %}checked{% endif %}> 2D Structure
+    <input type="radio" id="vis3d" name="vis_type" value="3d" {% if vis_type == '3d' %}checked{% endif %}> 3D Structure<br><br>
+
+    <div class="button-wrapper btn-group">
+        <button type="submit">Generate Structure</button>
+        <button type="button" class="btn-reset">Reset</button>
+        <button type="button" class="btn-home" onclick="window.location.href='/'">Home</button>
+    </div>
+</form>
+
+
+
+{% if error %}
+    <div class="error">{{ error }}</div>
+{% endif %}
+
+{% if vis_type == '2d' %}
+    <h3>2D Structure</h3>
+    <img id="structure2d" src="{{ url_for('static', filename='peptide_2d.png') }}" alt="2D Structure"
+         style="border:1px solid #ccc; border-radius:10px; max-width: 100%;"><br><br>
+    <div class="button-wrapper">
+        <a href="{{ url_for('static', filename='peptide_2d.png') }}" download="peptide_structure.png">
+            <button class="download-btn">Download 2D Structure</button>
+        </a>
+    </div>
+{% endif %}
+
+{% if vis_type == '3d' and mol_block %}
+    <div style="position: relative; max-width: 1000px; width: 100%;">
+        <h3>3D Structure</h3>
+
+        <select id="styleSelector" class="style-selector"
+                style="position: absolute; top: 0; right: 0; margin: 10px; z-index: 10;">
+            <option value="stick">Stick</option>
+            <option value="sphere">Sphere</option>
+            <option value="line">Line</option>
+            <option value="ball_and_stick">Ball and Stick</option>
+        </select>
+
+        <div id="viewer3d" class="viewer"></div>
+    </div>
+
+    <div class="button-wrapper">
+        <form method="POST" action="/download_molblock" style="margin-top: 15px;">
+            <input type="hidden" name="mol_block" value="{{ mol_block }}">
+            <button class="download-btn" type="submit">Download 3D MOL File</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const molBlock = `{{ mol_block | safe }}`;
+            const viewer = $3Dmol.createViewer("viewer3d", { backgroundColor: "white" });
+            const styleSelector = document.getElementById("styleSelector");
+
+            function applyStyle(style) {
+                viewer.clear();
+                viewer.addModel(molBlock, "mol");
+                switch (style) {
+                    case "stick": viewer.setStyle({}, { stick: {} }); break;
+                    case "sphere": viewer.setStyle({}, { sphere: {} }); break;
+                    case "line": viewer.setStyle({}, { line: {} }); break;
+                    case "ball_and_stick":
+                        viewer.setStyle({}, { stick: {}, sphere: { scale: 0.3 } }); break;
+                    default: viewer.setStyle({}, { stick: {} });
+                }
+                viewer.zoomTo();
+                viewer.render();
+            }
+
+            applyStyle(styleSelector.value);
+            styleSelector.addEventListener("change", () => applyStyle(styleSelector.value));
+        });
+    </script>
+{% endif %}
+
+{% if properties %}
+    <div class="properties-table">
+        <h3>Molecular Properties</h3>
+        <table>
+            {% for key, value in properties.items() %}
+            <tr>
+                <td><strong>{{ key }}</strong></td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+<!-- Reset Script -->
+<script>
+    document.querySelector(".btn-reset").addEventListener("click", function () {
+        document.getElementById("sequence").value = "";
+        document.getElementById("vis2d").checked = true;
+
+        const img = document.getElementById("structure2d");
+        if (img) img.src = "";
+
+        const viewer3d = document.getElementById("viewer3d");
+        if (viewer3d) viewer3d.innerHTML = "";
+
+        const propTable = document.querySelector(".properties-table");
+        if (propTable) propTable.innerHTML = "";
+    });
+</script>
+
+</body>
+</html>
